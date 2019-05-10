@@ -11,14 +11,12 @@ with open(path, 'r', encoding='utf-8') as i_file:
         words = line.strip().split(' ')
         words.insert(0, '<s>')
         words.append('</s>')
-        for i in range(N-1, len(words)-N+2):
+        for i in range(N-1, len(words)):
             for j in range(1, N):
                 counts[' '.join(words[i-N+j:i+1])] += 1
                 context_counts[' '.join(words[i-N+j:i])] += 1
             counts[words[i]] += 1
             context_counts[''] += 1
-
-print(counts)
 
 context = []
 
@@ -28,4 +26,4 @@ with open('model_ngram', 'w', encoding='utf-8') as m_file:
         words.pop(len(words)-1)
         context = ' '.join(words)
         probability = counts[key] / context_counts[context]
-        m_file.write(f'{key}\t{probability}\n')
+        m_file.write(f'{key}\t{probability:.6f}\n')
